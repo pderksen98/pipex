@@ -12,22 +12,6 @@
 
 #include "pipex.h"
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 char	*get_envp_path(char **envp)
 {
 	while (ft_strncmp("PATH", *envp, 4))
@@ -35,27 +19,107 @@ char	*get_envp_path(char **envp)
 	return (*envp + 5);
 }
 
+void	error(void)
+{
+	perror("Error");
+	exit(errno);
+}
+
+void	child_process(char **argv, char **envp, int *fd)
+{
+	int	f1;
+
+	f1 = open(argv[1], O_RDONLY);
+	if (f1 == -1)
+		error();
+	close(fd[0]);
+	dup2(f1, STDIN_FILENO);
+	dup2(fd[1], STDOUT_FILENO);
+	execute(argv[2], envp);
+}
+
+void	parent_process(char **argv, char **envp, int *fd)
+{
+	int	f2;
+
+	f2 = open(argv[4], O_RDWR | O_CREAT | O_TRUNC, 0644);
+	if (f2 == -1)
+		error();
+	close(fd[1]);
+	dup2(fd[0], STDIN_FILENO);
+	dup2(f2, STDOUT_FILENO);
+	execute(argv[3], envp);
+}
+
+
+char	*path_finder(char *cmd, char **paths)
+{
+	char	*path;
+	char	*t_path;
+	int		i;
+
+	i = 0;
+	while (paths[i])
+	{
+		t_path = ft_strjoin(paths[i], "/");
+		path = ft_strjoin(t_path, cmd);
+		free(t_path);
+		if (access(path, F_OK) == 0)
+			return (path);
+		free (path);
+		i++;
+	}
+	i = -1;
+	while (paths[++i])
+		free(paths[i]);
+	free(paths);
+	return (0);
+}
+
+void	execute(char *argv, char **envp)
+{
+	int		i;
+	char	*env;
+	char	**env_2d;
+	char	**cmd;
+	char	*path;
+
+	env = get_envp_path(envp);
+	env_2d = ft_split(env, ':');
+	ft_check_malloc(env_2d);
+	cmd = ft_split(argv, ' ');
+	ft_check_malloc(cmd);
+	path = path_finder(cmd[0], env_2d);
+	if (!path)
+	{
+		i = -1;
+		while (cmd[++i])
+			free(cmd[i]);
+		free(cmd);
+		error();
+	}
+	if (execve(path, cmd, envp) == -1)
+		error();
+}
 
 int	main(int argc, char **argv, char **envp)
 {
-	t_pipex	p;
-	
-	// if (argc < 5)
-	// 	return (0);
-	char	*envp_path;
-	char	**envp_path2d;
-	p.f1 = open(argv[1], O_RDONLY);
-	p.f2 = open(argv[argc - 1], O_RDWR | O_CREAT | O_TRUNC, 0644);
-	
-	if (p.f1 < 0 || p.f2 < 0 || p.f1 > OPEN_MAX || p.f2 > OPEN_MAX)
+	int		fd[2];
+	pid_t	pid1;
+
+	if (argc == 5)
 	{
-		perror("");
-		exit(errno);
+		if (pipe(fd) == -1)
+			error();
+		pid1 = fork();
+		if (pid1 == -1)
+			error();
+		if (pid1 == 0)
+			child_process(argv, envp, fd);
+		waitpid(pid1, NULL, 0); //check this
+		parent_process(argv, envp, fd);
 	}
-	envp_path = get_envp_path(envp);
-	envp_path2d = ft_split(envp_path, ':');
-	ft_check_malloc(envp_path2d);
-	
-	
+	else
+		ft_putstr_fd("Not correct number of arguments\n", 2);
 	return (0);
 }

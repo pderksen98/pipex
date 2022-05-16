@@ -18,15 +18,11 @@
 #include <sys/errno.h> //ernno
 #include <fcntl.h> //open
 
-typedef struct	s_pipex
-{
-	int f1;
-	int f2;
-	int fd;
-	int cmd_count;
-	int max_cmd;
-}	t_pipex;
-
-int		main(int argc, char **argv, char **envp);
+int	main(int argc, char **argv, char **envp);
+void	execute(char *argv, char **envp);
+char	*path_finder(char *cmd, char **paths);
+void	parent_process(char **argv, char **envp, int *fd);
+void	child_process(char **argv, char **envp, int *fd);
+void	error(void);
 char	*get_envp_path(char **envp);
 #endif

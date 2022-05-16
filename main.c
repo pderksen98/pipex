@@ -102,7 +102,7 @@ void	pipex(int f1, int f2, char *cmd1, char *cmd2)
 // 		 you can simply retrieve it in your main (see below)
 //        and pass int onto execve, no need to do anything here
 //		in envp you'll see a line PATH which contains all possible
-//		paths to the commands binareis
+//		paths to the commands binaries
 
 int main(int argc, char **argv, char **envp)
 {
