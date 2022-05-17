@@ -6,24 +6,11 @@
 /*   By: pderksen <pderksen@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/05/11 18:20:48 by pderksen      #+#    #+#                 */
-/*   Updated: 2022/05/12 17:17:08 by pderksen      ########   odam.nl         */
+/*   Updated: 2022/05/17 13:40:31 by pderksen      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
-
-char	*get_envp_path(char **envp)
-{
-	while (ft_strncmp("PATH", *envp, 4))
-		envp++;
-	return (*envp + 5);
-}
-
-void	error(void)
-{
-	perror("Error");
-	exit(errno);
-}
 
 void	child_process(char **argv, char **envp, int *fd)
 {
@@ -51,61 +38,11 @@ void	parent_process(char **argv, char **envp, int *fd)
 	execute(argv[3], envp);
 }
 
-
-char	*path_finder(char *cmd, char **paths)
-{
-	char	*path;
-	char	*t_path;
-	int		i;
-
-	i = 0;
-	while (paths[i])
-	{
-		t_path = ft_strjoin(paths[i], "/");
-		path = ft_strjoin(t_path, cmd);
-		free(t_path);
-		if (access(path, F_OK) == 0)
-			return (path);
-		free (path);
-		i++;
-	}
-	i = -1;
-	while (paths[++i])
-		free(paths[i]);
-	free(paths);
-	return (0);
-}
-
-void	execute(char *argv, char **envp)
-{
-	int		i;
-	char	*env;
-	char	**env_2d;
-	char	**cmd;
-	char	*path;
-
-	env = get_envp_path(envp);
-	env_2d = ft_split(env, ':');
-	ft_check_malloc(env_2d);
-	cmd = ft_split(argv, ' ');
-	ft_check_malloc(cmd);
-	path = path_finder(cmd[0], env_2d);
-	if (!path)
-	{
-		i = -1;
-		while (cmd[++i])
-			free(cmd[i]);
-		free(cmd);
-		error();
-	}
-	if (execve(path, cmd, envp) == -1)
-		error();
-}
-
 int	main(int argc, char **argv, char **envp)
 {
 	int		fd[2];
 	pid_t	pid1;
+	int		status;
 
 	if (argc == 5)
 	{
@@ -116,10 +53,13 @@ int	main(int argc, char **argv, char **envp)
 			error();
 		if (pid1 == 0)
 			child_process(argv, envp, fd);
-		waitpid(pid1, NULL, 0); //check this
+		waitpid(pid1, &status, 0);
 		parent_process(argv, envp, fd);
 	}
 	else
+	{
 		ft_putstr_fd("Not correct number of arguments\n", 2);
+		return (EXIT_FAILURE);
+	}
 	return (0);
 }
