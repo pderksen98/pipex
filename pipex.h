@@ -6,7 +6,7 @@
 /*   By: pderksen <pderksen@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/05/10 16:42:33 by pderksen      #+#    #+#                 */
-/*   Updated: 2022/06/23 11:31:31 by pderksen      ########   odam.nl         */
+/*   Updated: 2022/06/23 14:27:28 by pderksen      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int		main(int argc, char **argv, char **envp);
 void	pipex(t_pipex p, char **argv);
 void	error_message(char *message);
 void	error(void);
-void	parent_process(int *fd, pid_t child);
+void	parent_process(int *fd);
 void	parent_process_2(pid_t child);
 void	child_process(int *fd, char **argv, t_pipex *p);
 void	child_process_2(char **argv, t_pipex *p);

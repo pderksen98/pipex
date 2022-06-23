@@ -6,7 +6,7 @@
 /*   By: pderksen <pderksen@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/06/23 11:22:34 by pderksen      #+#    #+#                 */
-/*   Updated: 2022/06/23 12:21:55 by pderksen      ########   odam.nl         */
+/*   Updated: 2022/06/23 14:27:04 by pderksen      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,13 +40,12 @@ void	child_process_2(char **argv, t_pipex *p)
 //read end (fd[0]) of pipe is duplicated to STDIN and closed
 //Such that next child process reads input from end of previous pipe
 //Waits for the child to be terminated
-void	parent_process(int *fd, pid_t child)
+void	parent_process(int *fd)
 {
 	close(fd[1]);
 	if (dup2(fd[0], STDIN_FILENO) == -1)
 		error();
 	close(fd[0]);
-	waitpid(child, NULL, 0);
 }
 
 //Waits for the last child process to terminate

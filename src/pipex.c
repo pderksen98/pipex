@@ -6,7 +6,7 @@
 /*   By: pderksen <pderksen@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/06/23 11:21:23 by pderksen      #+#    #+#                 */
-/*   Updated: 2022/06/23 12:26:58 by pderksen      ########   odam.nl         */
+/*   Updated: 2022/06/23 14:27:17 by pderksen      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void	pipex(t_pipex p, char **argv)
 		if (child == 0)
 			child_process(fd, argv, &p);
 		else
-			parent_process(fd, child);
+			parent_process(fd);
 		p.current_cmd++;
 	}
 	child = fork();
