@@ -6,7 +6,7 @@
 /*   By: pderksen <pderksen@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2022/06/23 11:21:23 by pderksen      #+#    #+#                 */
-/*   Updated: 2022/06/23 14:27:17 by pderksen      ########   odam.nl         */
+/*   Updated: 2022/06/23 14:35:11 by pderksen      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ int	main(int argc, char **argv, char **envp)
 
 	if (argc < 5)
 	{
-		ft_putstr_fd("To few arguments (5 minimum)\n", 2);
+		ft_putstr_fd("To few arguments (4 minimum)\n", 2);
 		return (EXIT_FAILURE);
 	}
 	p.f1 = open(argv[1], O_RDONLY);
