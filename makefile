@@ -6,7 +6,7 @@
 #    By: pderksen <pderksen@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2022/05/10 16:40:14 by pderksen      #+#    #+#                  #
-#    Updated: 2022/05/17 10:04:20 by pderksen      ########   odam.nl          #
+#    Updated: 2022/06/23 11:29:53 by pderksen      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,8 +21,10 @@ else
 CFLAGS := -Wall -Wextra -Werror -fsanitize=address -g
 endif
 
-SRCS := pipex.c \
-		utils.c
+SRCS := src/pipex.c \
+		src/fork_pipe.c \
+		src/execute.c
+
 HEADERFILES := pipex.h
 
 LIBFT := libft/libft.a
