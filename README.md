@@ -37,4 +37,4 @@ This project also handles multiple pipes when more then 2 commands are given.
 ```bash
 $> ./pipex file1 cmd1 cmd2 cmd3 ... cmdn file2
 ```
-Behaves like: < infile cmd1 | cmd2 | cmd3 | ... | cmdn > file2
+Behaves like: < file1 cmd1 | cmd2 | cmd3 | ... | cmdn > file2
